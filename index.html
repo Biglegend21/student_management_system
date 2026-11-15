@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A simple student management system built with HTML, CSS and JavaScript." />
+  <title>Student Management System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div>
+          <strong>CampusDesk</strong>
+          <span>Student records</span>
+        </div>
+      </div>
+      <nav aria-label="Main navigation">
+        <a class="nav-link active" href="#dashboard"><span>▦</span> Dashboard</a>
+        <a class="nav-link" href="#students"><span>♙</span> Students</a>
+      </nav>
+      <div class="sidebar-note">
+        <strong>SIWES Project</strong>
+        <p>Built with HTML, CSS and JavaScript.</p>
+      </div>
+    </aside>
+
+    <main class="main-content" id="dashboard">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">ADMINISTRATION</p>
+          <h1>Student Management System</h1>
+          <p class="subheading">Manage student records from one simple dashboard.</p>
+        </div>
+        <div class="profile-chip"><span class="avatar">A</span><span>Administrator</span></div>
+      </header>
+
+      <section class="stats-grid" aria-label="Student statistics">
+        <article class="stat-card">
+          <div class="stat-icon blue">♙</div>
+          <div><p>Total students</p><strong id="totalStudents">0</strong></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-icon green">▤</div>
+          <div><p>Departments</p><strong id="totalDepartments">0</strong></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-icon orange">⌕</div>
+          <div><p>Levels represented</p><strong id="totalLevels">0</strong></div>
+        </article>
+      </section>
+
+      <section class="workspace" id="students">
+        <article class="panel form-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">STUDENT RECORD</p>
+              <h2 id="formTitle">Add a student</h2>
+            </div>
+            <span class="heading-icon">＋</span>
+          </div>
+          <form id="studentForm" novalidate>
+            <input type="hidden" id="editId" />
+            <div class="field">
+              <label for="fullName">Full name <span>*</span></label>
+              <input id="fullName" name="fullName" type="text" placeholder="e.g. Ada Okafor" required maxlength="80" />
+              <small class="field-error" id="nameError"></small>
+            </div>
+            <div class="field">
+              <label for="matricNo">Matriculation number <span>*</span></label>
+              <input id="matricNo" name="matricNo" type="text" placeholder="e.g. CSC/2024/001" required maxlength="30" />
+              <small class="field-error" id="matricError"></small>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="department">Department <span>*</span></label>
+                <input id="department" name="department" type="text" placeholder="e.g. Computer Science" required maxlength="60" />
+                <small class="field-error" id="departmentError"></small>
+              </div>
+              <div class="field">
+                <label for="level">Level <span>*</span></label>
+                <select id="level" name="level" required>
+                  <option value="">Select level</option>
+                  <option>100 Level</option><option>200 Level</option><option>300 Level</option>
+                  <option>400 Level</option><option>500 Level</option><option>Postgraduate</option>
+                </select>
+                <small class="field-error" id="levelError"></small>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="email">Email address</label>
+                <input id="email" name="email" type="email" placeholder="student@example.com" maxlength="100" />
+                <small class="field-error" id="emailError"></small>
+              </div>
+              <div class="field">
+                <label for="phone">Phone number</label>
+                <input id="phone" name="phone" type="tel" placeholder="08012345678" maxlength="20" />
+                <small class="field-error" id="phoneError"></small>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="saveButton" type="submit">Save student</button>
+              <button class="btn btn-ghost hidden" id="cancelEdit" type="button">Cancel edit</button>
+            </div>
+            <p class="form-footnote">Fields marked * are required. Matriculation numbers must be unique.</p>
+          </form>
+        </article>
+
+        <article class="panel records-panel">
+          <div class="records-header">
+            <div>
+              <p class="eyebrow">RECORD DIRECTORY</p>
+              <h2>Student records</h2>
+            </div>
+            <button class="btn btn-outline" id="exportCsv" type="button">↓ Export CSV</button>
+          </div>
+          <div class="toolbar">
+            <div class="search-wrap">
+              <span>⌕</span>
+              <input id="searchInput" type="search" placeholder="Search name, matric no. or department..." aria-label="Search student records" />
+            </div>
+            <select id="levelFilter" aria-label="Filter by level">
+              <option value="">All levels</option>
+              <option>100 Level</option><option>200 Level</option><option>300 Level</option>
+              <option>400 Level</option><option>500 Level</option><option>Postgraduate</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Student</th><th>Matric No.</th><th>Department</th><th>Level</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="studentTableBody"></tbody>
+            </table>
+            <div class="empty-state" id="emptyState">
+              <div class="empty-icon">♙</div>
+              <strong>No student records yet</strong>
+              <p>Add your first student using the form.</p>
+            </div>
+          </div>
+          <div class="table-footer"><span id="recordCount">Showing 0 records</span><button class="text-button" id="clearAll" type="button">Clear all records</button></div>
+        </article>
+      </section>
+      <footer class="page-footer">CampusDesk · Student Management System <span>SIWES demonstration project</span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
